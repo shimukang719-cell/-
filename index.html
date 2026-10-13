@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haya Community Care | Admin Demo</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f1f8f3;
+  color: #244535;
+}
+header {
+  background: #d9efe0;
+  padding: 22px;
+  text-align: center;
+}
+main {
+  max-width: 950px;
+  margin: 35px auto;
+  padding: 20px;
+}
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 18px #24453512;
+}
+input, button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  font-size: 16px;
+}
+input { border: 1px solid #bdd5c4; }
+button {
+  border: 0;
+  background: #39845a;
+  color: white;
+  cursor: pointer;
+}
+button:hover { background: #286c46; }
+.small-button { width: auto; padding: 10px 18px; }
+.hidden { display: none; }
+.notice { color: #a13b35; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+  gap: 14px;
+}
+.stat {
+  background: #e7f5eb;
+  border-radius: 10px;
+  padding: 18px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+th, td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #e0ebe3;
+}
+.table-wrap { overflow-x: auto; }
+footer { text-align: center; padding: 25px; color: #62766a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Haya Community Care</h1>
+  <p>Local Admin Dashboard — Demo Version</p>
+</header>
+
+<main>
+  <section id="login" class="card">
+    <h2>Administrator Login</h2>
+    <p>Enter the demo credentials to continue.</p>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input id="username" autocomplete="username"
+             required placeholder="Enter username">
+      <label for="password">Password</label>
+      <input id="password" type="password"
+             autocomplete="current-password"
+             required placeholder="Enter password">
+      <button type="submit">Log In</button>
+      <p id="loginMessage" class="notice" role="alert"></p>
+    </form>
+    <p><strong>Demo username:</strong> admin</p>
+    <p><strong>Demo password:</strong> HayaDemo2026</p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h2>Welcome, Administrator</h2>
+      <p>These are fictional records for practice only.</p>
+      <button id="logout" class="small-button">Log Out</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <h3 id="total">0</h3>
+        <p>Total registrations</p>
+      </div>
+      <div class="stat">
+        <h3 id="pending">0</h3>
+        <p>Pending requests</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Registration Records</h2>
+      <input id="search" placeholder="Search demo records...">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Demo Name</th>
+              <th>Service Requested</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="records"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Haya Community Care · Local learning demo · No real client data
+</footer>
+
+<script>
+const demoAccount = "admin";
+const demoPassword = "HayaDemo2026";
+
+const registrations = [
+  {id:"D001",name:"Sample Person A",service:"Community Visit",
+   date:"2026-10-01",status:"Pending"},
+  {id:"D002",name:"Sample Person B",service:"Friendly Chat",
+   date:"2026-10-03",status:"Reviewed"},
+  {id:"D003",name:"Sample Person C",service:"Community Support",
+   date:"2026-10-05",status:"Pending"},
+  {id:"D004",name:"Sample Person D",service:"Information Session",
+   date:"2026-10-08",status:"Reviewed"}
+];
+
+const login = document.getElementById("login");
+const dashboard = document.getElementById("dashboard");
+const records = document.getElementById("records");
+
+function showRecords(list) {
+  records.replaceChildren();
+
+  list.forEach(item => {
+    const tr = document.createElement("tr");
+    [item.id, item.name, item.service, item.date, item.status]
+      .forEach(value => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        tr.appendChild(td);
+      });
+    records.appendChild(tr);
+  });
+}
+
+document.getElementById("loginForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if (username === demoAccount && password === demoPassword) {
+    login.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+
+    document.getElementById("total").textContent =
+      registrations.length;
+    document.getElementById("pending").textContent =
+      registrations.filter(r => r.status === "Pending").length;
+
+    showRecords(registrations);
+  } else {
+    document.getElementById("loginMessage").textContent =
+      "Incorrect demo username or password.";
+  }
+});
+
+document.getElementById("search").addEventListener("input", event => {
+  const term = event.target.value.toLowerCase();
+  const filtered = registrations.filter(item =>
+    Object.values(item).some(value =>
+      value.toLowerCase().includes(term)
+    )
+  );
+  showRecords(filtered);
+});
+
+document.getElementById("logout").addEventListener("click", () => {
+  dashboard.classList.add("hidden");
+  login.classList.remove("hidden");
+  document.getElementById("loginForm").reset();
+  document.getElementById("loginMessage").textContent = "";
+  document.getElementById("search").value = "";
+  records.replaceChildren();
+});
+</script>
+</body>
+</html>
