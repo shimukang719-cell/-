@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eaf7f0">
+  <meta name="description" content="Haya Community Care is an independent community volunteering initiative in Dublin, Ireland.">
+  <title>Haya Community Care | Dublin</title>
+  <style>
+    :root {
+      --mint: #eaf7f0;
+      --mint-2: #d8efe2;
+      --green: #286b50;
+      --green-dark: #204f3d;
+      --ink: #23372d;
+      --muted: #52675b;
+      --white: #fff;
+      --line: #cfe3d7;
+      --shadow: 0 14px 38px rgba(32,79,61,.10);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+    a { color: var(--green); }
+    button, input, select, textarea { font: inherit; }
+    .skip-link {
+      position: absolute; left: -9999px; top: 0; background: #fff; padding: 10px;
+    }
+    .skip-link:focus { left: 10px; z-index: 9999; }
+    .site-header {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-wrap {
+      max-width: 1180px; margin: auto; padding: 12px 22px;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 220px; }
+    .brand-mark {
+      width: 46px; height: 46px; border-radius: 15px;
+      background: var(--mint-2); color: var(--green);
+      display: grid; place-items: center; font-size: 27px;
+    }
+    .brand-name { display: block; color: var(--green-dark); font-weight: 800; line-height: 1.2; }
+    .brand-sub { display: block; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .nav-links { display: flex; align-items: center; justify-content: flex-end; gap: 4px; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--green-dark); text-decoration: none; font-size: 15px; font-weight: 650;
+      padding: 9px 11px; border-radius: 12px;
+    }
+    .nav-links a:hover, .nav-links a:focus-visible { background: var(--mint); outline: none; }
+    .menu-toggle {
+      display: none; border: 1px solid var(--line); background: #fff; color: var(--green-dark);
+      border-radius: 12px; padding: 8px 12px; cursor: pointer;
+    }
+    main { overflow: hidden; }
+    .hero {
+      position: relative; isolation: isolate; background: linear-gradient(135deg, #fff 0%, #f3fbf6 55%, #e4f5eb 100%);
+      padding: 88px 22px 72px;
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; z-index: -1; border-radius: 50%;
+      filter: blur(2px); opacity: .6; pointer-events: none;
+      animation: float 15s ease-in-out infinite alternate;
+    }
+    .hero::before {
+      width: 560px; height: 560px; background: #bfe7cf; top: -90px; right: -140px;
+      animation: floatLarge 10s ease-in-out infinite alternate;
+    }
+    .hero::after {
+      width: 430px; height: 430px; background: #d2f0df; bottom: -150px; left: -100px;
+      animation: floatLarge 13s ease-in-out infinite alternate-reverse; animation-delay: -4s;
+    }
+    .hero-inner, .section-inner { max-width: 1080px; margin: 0 auto; }
+    .eyebrow { color: var(--green); text-transform: uppercase; letter-spacing: .12em; font-size: 14px; font-weight: 800; }
+    h1 { color: var(--green-dark); font-size: clamp(2.55rem, 6vw, 4.6rem); line-height: 1.08; letter-spacing: -.045em; max-width: 850px; margin: 16px 0 22px; }
+    h2 { color: var(--green-dark); font-size: clamp(1.8rem, 3.8vw, 2.65rem); line-height: 1.2; margin: 0 0 16px; }
+    h3 { color: var(--green-dark); line-height: 1.25; margin: 0 0 10px; font-size: 1.3rem; }
+    p { margin: 0 0 16px; }
+    .hero-copy { max-width: 720px; font-size: clamp(1.1rem, 2vw, 1.3rem); color: #40584a; }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 58px; padding: 14px 22px; border-radius: 15px;
+      border: 2px solid var(--green); background: var(--green); color: #fff;
+      font-weight: 800; text-decoration: none; cursor: pointer; text-align: center;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn.secondary { background: #fff; color: var(--green-dark); border-color: #a9cfb8; }
+    .btn.light { background: var(--mint); color: var(--green-dark); border-color: var(--mint-2); }
+    .btn.wide { width: 100%; min-height: 72px; font-size: 1.13rem; justify-content: flex-start; padding: 18px 22px; }
+    .btn .arrow { margin-left: auto; font-size: 1.3rem; }
+    .hero-note { color: var(--muted); font-size: 15px; margin-top: 22px; }
+    .section { padding: 76px 22px; }
+    .section.mint { background: var(--mint); }
+    .section-heading { max-width: 720px; margin-bottom: 30px; }
+    .section-heading p { color: var(--muted); }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+    .card {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 26px; box-shadow: 0 8px 22px rgba(32,79,61,.045);
+    }
+    .icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; background: var(--mint); font-size: 27px; margin-bottom: 18px; }
+    .card p { color: var(--muted); margin-bottom: 0; }
+    .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .stat { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+    .stat-number { font-size: clamp(2rem, 5vw, 3rem); color: var(--green); font-weight: 850; line-height: 1.1; }
+    .stat-label { color: var(--muted); font-size: 16px; margin-top: 10px; }
+    .notice { border-left: 5px solid var(--green); background: #f4fbf6; padding: 18px 20px; border-radius: 0 14px 14px 0; color: #40584a; }
+    .form-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 32px; align-items: start; }
+    form { display: grid; gap: 16px; }
+    label { display: block; font-weight: 750; color: var(--green-dark); margin-bottom: 6px; }
+    input, select, textarea {
+      width: 100%; padding: 13px 14px; border: 1px solid #b8d3c3; border-radius: 12px;
+      background: #fff; color: var(--ink); min-height: 50px;
+    }
+    textarea { min-height: 115px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { outline: 3px solid #bde3cc; border-color: var(--green); }
+    .small { font-size: 14px; color: var(--muted); }
+    .form-message { display: none; border-radius: 12px; padding: 14px; background: #fff5df; color: #634b17; }
+    .form-message.show { display: block; }
+    .footer-cta { background: linear-gradient(135deg, #eaf7f0, #f8fcf9); }
+    .cta-panel { max-width: 850px; margin: auto; }
+    .cta-stack { display: grid; gap: 14px; margin-top: 28px; }
+    footer { background: #204f3d; color: #f4fbf6; padding: 34px 22px; }
+    .footer-inner { max-width: 1080px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; }
+    footer a { color: #fff; }
+    footer p { margin-bottom: 8px; }
+    .admin-hint { font-size: 14px; color: var(--muted); }
+    @keyframes float { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-28px,24px,0) scale(1.08); } }
+    @keyframes floatLarge {
+      0% { transform: translate3d(-35px, -20px, 0) scale(.92) rotate(0deg); }
+      50% { transform: translate3d(55px, 35px, 0) scale(1.12) rotate(8deg); }
+      100% { transform: translate3d(-15px, 70px, 0) scale(1.04) rotate(-6deg); }
+    }
+    @media (max-width: 900px) {
+      .nav-wrap { flex-wrap: wrap; }
+      .brand { min-width: 0; }
+      .menu-toggle { display: inline-flex; }
+      .nav-links { display: none; width: 100%; align-items: stretch; flex-direction: column; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px; }
+      .cards { grid-template-columns: 1fr; }
+      .form-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .hero::before { width: 390px; height: 390px; right: -180px; top: -45px; }
+      .hero::after { width: 300px; height: 300px; left: -130px; bottom: -100px; }
+      body { font-size: 17px; }
+      .hero { padding-top: 58px; }
+      .actions { display: grid; }
+      .actions .btn { width: 100%; }
+      .stats { grid-template-columns: 1fr; }
+      .section { padding: 56px 18px; }
+      .nav-wrap { padding: 10px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="#home" aria-label="Haya Community Care home">
+        <span class="brand-mark" aria-hidden="true">♡</span>
+        <span><span class="brand-name">Haya Community Care</span><span class="brand-sub">Community support · Dublin</span></span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">☰ Menu</button>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Free Services</a>
+        <a href="#booking">Booking</a>
+        <a href="#community-log">Community Log</a>
+        <a href="#contact">Contact</a>
+        <a href="admin.html">Admin Demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div class="eyebrow">Welcome to our community</div>
+        <h1>Care, Kindness and Wellbeing for Everyone.</h1>
+        <p class="hero-copy">Supporting our community through compassion, practical help and accessible wellbeing services in Dublin.</p>
+        <div class="actions">
+          <a class="btn" href="registration.html">Register <span aria-hidden="true">→</span></a>
+          <a class="btn secondary" href="#booking">Book Free Session <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="hero-note">An independent community volunteering initiative · Dublin, Ireland</p>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div class="eyebrow">About us</div>
+          <h2>A welcoming community, built on respect.</h2>
+          <p>Haya Community Care is an independent community volunteering initiative. We aim to help people feel heard, respected and supported.</p>
+        </div>
+        <div class="cards">
+          <article class="card"><div class="icon" aria-hidden="true">♡</div><h3>Compassion</h3><p>We approach every person with kindness, dignity and respect.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">✿</div><h3>Community</h3><p>We aim to make local support easier to access, subject to volunteer availability.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">⌂</div><h3>Privacy</h3><p>Personal information should be handled carefully and never displayed on public pages.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mint" id="services">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div class="eyebrow">Free services</div>
+          <h2>Community wellbeing support</h2>
+          <p>Support is subject to availability, volunteer experience, appropriate training and any applicable Irish requirements. Please wait for confirmation before attending.</p>
+        </div>
+        <div class="cards">
+          <article class="card"><div class="icon" aria-hidden="true">☘</div><h3>Wellbeing Support</h3><p>Friendly wellbeing conversations and general support in a respectful environment.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">✋</div><h3>Muscle Relaxation</h3><p>Where appropriately qualified and insured, volunteers may offer suitable relaxation support.</p></article>
+          <article class="card"><div class="icon" aria-hidden="true">☀</div><h3>Community Guidance</h3><p>Practical signposting and community connection, based on the support available.</p></article>
+        </div>
+        <p class="small" style="margin-top:18px">Our services are not a substitute for medical diagnosis or emergency care. No particular health outcome is guaranteed.</p>
+      </div>
+    </section>
+
+    <section class="section" id="register">
+      <div class="section-inner form-layout">
+        <div>
+          <div class="eyebrow">Join our community</div>
+          <h2>Register</h2>
+          <p><a href="registration.html">Open the standalone registration page →</a></p>
+          <p>Create a request to join our community. This local practice form stores fictional entries in this browser only. No real account is created.</p>
+          <div class="notice">Please do not submit sensitive medical details through this demo form.</div>
+        </div>
+        <div class="card">
+          <form id="registerForm">
+            <div><label for="regName">Full name</label><input id="regName" name="name" autocomplete="name" required></div>
+            <div><label for="regEmail">Email address</label><input id="regEmail" name="email" type="email" autocomplete="email" required></div>
+            <div><label for="regRole">I am interested in</label><select id="regRole" name="role" required><option value="">Choose an option</option><option>Receiving community support</option><option>Volunteering</option><option>Learning more about the project</option></select></div>
+            <button class="btn" type="submit">Continue Registration →</button>
+            <div class="form-message" id="registerMessage" role="status">Demo entry saved in this browser only. No real account has been created.</div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mint" id="booking">
+      <div class="section-inner form-layout">
+        <div>
+          <div class="eyebrow">Booking</div>
+          <h2>Book a Free Session</h2>
+          <p>Send a request for a community wellbeing session. A request is not a confirmed appointment; we will need to confirm availability.</p>
+          <div class="notice">Only provide information needed to arrange the request. Please do not include diagnoses, detailed health histories or other sensitive information.</div>
+        </div>
+        <div class="card">
+          <form id="bookingForm">
+            <div><label for="bookName">Full name</label><input id="bookName" name="name" autocomplete="name" required></div>
+            <div><label for="bookEmail">Email address</label><input id="bookEmail" name="email" type="email" autocomplete="email" required></div>
+            <div><label for="bookArea">Town or area in Dublin</label><input id="bookArea" name="area" autocomplete="address-level2" required></div>
+            <div><label for="bookService">Requested service</label><select id="bookService" name="service" required><option value="">Choose a service</option><option>General wellbeing support</option><option>Muscle relaxation (subject to suitability)</option><option>Community guidance</option></select></div>
+            <div><label for="bookDate">Preferred date</label><input id="bookDate" name="date" type="date" required></div>
+            <div><label for="bookNote">Anything else needed to arrange the request? (optional)</label><textarea id="bookNote" name="note" maxlength="500" placeholder="Please do not enter sensitive medical information."></textarea></div>
+            <button class="btn" type="submit">Submit Booking Request →</button>
+            <div class="form-message" id="bookingMessage" role="status">Demo only: your request has not been sent or saved. The secure backend and email notifications must be connected before this form can accept real bookings.</div>
+            <p class="small">By submitting a real request in the future, users should first be shown the privacy notice and how their information will be used.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="community-log">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div class="eyebrow">Community log</div>
+          <h2>Our community impact</h2>
+          <p>Only aggregate statistics belong on this public page. These placeholders must be replaced with verified totals from real completed services.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-number">—</div><div class="stat-label">Completed sessions</div></div>
+          <div class="stat"><div class="stat-number">—</div><div class="stat-label">Volunteer hours</div></div>
+          <div class="stat"><div class="stat-number">—</div><div class="stat-label">Service categories</div></div>
+        </div>
+        <p class="small" style="margin-top:18px">No client names, photographs, contact details or identifiable individual service records are published here.</p>
+      </div>
+    </section>
+
+    <section class="section footer-cta">
+      <div class="cta-panel">
+        <div class="eyebrow">Get involved</div>
+        <h2>We're here to support our community.</h2>
+        <p>Register your interest, request a free session or join our community conversation.</p>
+        <div class="cta-stack">
+          <a class="btn wide" href="registration.html"><span aria-hidden="true">♙</span> Register <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn wide secondary" href="#booking"><span aria-hidden="true">▦</span> Book Free Session <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn wide light" id="whatsappLink" href="#contact"><span aria-hidden="true">☏</span> Join Our WhatsApp Community <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <p class="small" style="margin-top:12px">The WhatsApp button is not active yet. Add your genuine group invitation link in the website code before publishing.</p>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="section-inner">
+        <div class="section-heading">
+          <div class="eyebrow">Contact</div>
+          <h2>Contact Haya Community Care</h2>
+          <p>For now, please add a project email address or another appropriate public contact method before publishing this section. Do not publish a client's personal information.</p>
+        </div>
+        <div class="notice"><strong>Limited volunteer capacity:</strong> We are a community volunteering initiative with limited availability. Responses and appointments may take time, and all requests are subject to confirmation.</div>
+      </div>
+    </section>
+
+    <section class="section mint" id="privacy">
+      <div class="section-inner">
+        <div class="eyebrow">Privacy</div>
+        <h2>Privacy and confidentiality</h2>
+        <p>Our public website is intended to display general project information and aggregate service statistics only. Personal booking details must be stored separately in a secure system with access restricted to authorised people.</p>
+        <p>Before accepting real requests, we will publish a complete privacy notice explaining what data is collected, why it is needed, how long it is kept, who can access it, and how people can exercise their data protection rights.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Haya Community Care</strong><p>Independent community volunteering initiative · Dublin, Ireland</p></div>
+      <div><a href="#privacy">Privacy Notice</a><p>© <span id="year"></span> Haya Community Care</p></div>
+    </div>
+  </footer>
+
+  <script>
+    // IMPORTANT:
+    // 1) Registration demo stores fictional data in localStorage only; no server or email.
+    // 2) Connect a secure backend before collecting real personal information.
+    // 3) Never place service-role keys, passwords, or private tokens in this file.
+    // 4) Replace the placeholder WhatsApp URL only with your genuine group invite link.
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Replace with your actual invite link after creating the WhatsApp group.
+    const WHATSAPP_GROUP_INVITE_URL = '';
+    const whatsappLink = document.getElementById('whatsappLink');
+    if (WHATSAPP_GROUP_INVITE_URL.startsWith('https://chat.whatsapp.com/')) {
+      whatsappLink.href = WHATSAPP_GROUP_INVITE_URL;
+      whatsappLink.target = '_blank';
+      whatsappLink.rel = 'noopener noreferrer';
+      whatsappLink.querySelector('.small')?.remove();
+    } else {
+      whatsappLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        alert('The WhatsApp group invitation link has not been added yet.');
+      });
+    }
+
+    const STORE = 'haya-demo-registrations-v1';
+    document.getElementById('registerForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const list = JSON.parse(localStorage.getItem(STORE) || '[]');
+      list.push({id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        role: document.getElementById('regRole').value,
+        date: new Date().toISOString().slice(0,10), status: 'Pending'});
+      localStorage.setItem(STORE, JSON.stringify(list));
+      document.getElementById('registerMessage').classList.add('show');
+      event.target.reset();
+    });
+    document.getElementById('bookingForm').addEventListener('submit', event => {
+      event.preventDefault();
+      document.getElementById('bookingMessage').classList.add('show');
+    });
+  </script>
+</body>
+</html>
